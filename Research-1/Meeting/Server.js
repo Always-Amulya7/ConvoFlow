@@ -2,42 +2,55 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const mongoURI = "mongodb+srv://amulyadeep7:TctwaHzGrNPuVYV8@autotalk.i6cmt8w.mongodb.net/?retryWrites=true&w=majority&appName=AutoTalk";
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connected To Mongo Database'))
-    .catch(err => console.error('MongoDB Connection Error:', err));
 
+// ✅ Use Render-compatible MongoDB URI
+const mongoURI = "mongodb+srv://amulyadeep7:TctwaHzGrNPuVYV8@autotalk.i6cmt8w.mongodb.net/AutoTalk?retryWrites=true&w=majority&appName=AutoTalk";
+
+// ✅ Connect to MongoDB Atlas
+mongoose.connect(mongoURI)
+    .then(() => console.log('✅ Connected To MongoDB Atlas'))
+    .catch(err => console.error('❌ MongoDB Connection Error:', err));
+
+// ✅ Define Mongoose Schema
 const workerSchema = new mongoose.Schema({
     name: String,
     roomNumber: String,
     uid: String,
     joinedAt: { type: Date, default: Date.now }
 });
-
 const Worker = mongoose.model('workers', workerSchema);
 
+// ✅ Initialize Express App
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000; // ✅ Use Render-assigned port
 
+// ✅ Middleware
 app.use(cors());
 app.use(express.json());
+
+// ✅ Serve static files (if needed)
 app.use(express.static(path.join(__dirname)));
 
+// ✅ Serve Meeting frontend
+app.use('/Meeting', express.static(path.join(__dirname, 'Meeting')));
+app.get('/Meeting', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Meeting', 'index.html'));
+});
+
+// ✅ API Endpoints
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.send("🚀 AutoTalk Meeting API is Live");
 });
 
 app.post('/api/participants', async (req, res) => {
     try {
         const { name, roomNumber, uid } = req.body;
-
         if (!name || !roomNumber || !uid) {
-            return res.status(400).json({ error: 'Name, Room Number, And UID Are Required' });
+            return res.status(400).json({ error: 'Name, Room Number, and UID are required' });
         }
 
         const newWorker = new Worker({ name, roomNumber, uid });
         await newWorker.save();
-
         res.status(201).json({ message: 'Participant Added Successfully', worker: newWorker });
     } catch (error) {
         console.error('Error Saving Participant:', error);
@@ -73,9 +86,9 @@ app.delete('/api/participants/:uid', async (req, res) => {
     }
 });
 
-console.log("This Has Digital Rights");
-console.log("Developer - Amulya Shrivastava");
-
+// ✅ Start Server
 app.listen(PORT, () => {
-    console.log(`Server Is Running On http://convoflow.onrender.com:${PORT}`);
+    console.log("🚀 This Has Digital Rights");
+    console.log("👨‍💻 Developer - Amulya Shrivastava");
+    console.log(`✅ Server running at: http://localhost:${PORT}`);
 });
