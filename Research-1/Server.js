@@ -61,7 +61,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
 }));
-
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 // Serve Static Files for each section
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/Login", express.static(path.join(__dirname, "Login")));
