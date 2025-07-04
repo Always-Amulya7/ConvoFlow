@@ -30,3 +30,17 @@ document.addEventListener("keydown", (event) => {
     Creation.click();
   }
 });
+
+app.post("/admin/login", async (req, res) => {
+  const { username, password } = req.body;
+  const admin = await Admin.findOne({ username, password });
+
+  if (admin) {
+    // Optional: set session
+    req.session.username = username;
+    res.redirect(303, "/author"); // 303 = see other (forces GET)
+  } else {
+    res.status(401).json({ error: "Invalid credentials" });
+  }
+});
+
