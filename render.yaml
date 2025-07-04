@@ -2,7 +2,7 @@ services:
   - type: web
     name: main-server
     env: node
-    rootDir: .
+    rootDir: Research-1
     buildCommand: npm install
     startCommand: node Server.js
     plan: free
@@ -10,7 +10,7 @@ services:
   - type: web
     name: admin-server
     env: node
-    rootDir: Admin Data
+    rootDir: Research-1/Admin Data
     buildCommand: npm install
     startCommand: node Server.js
     plan: free
@@ -18,7 +18,7 @@ services:
   - type: web
     name: author-server
     env: node
-    rootDir: Author Page
+    rootDir: Research-1/Author Page
     buildCommand: npm install
     startCommand: node Server.js
     plan: free
@@ -26,7 +26,7 @@ services:
   - type: web
     name: meeting-server
     env: node
-    rootDir: Meeting
+    rootDir: Research-1/Meeting
     buildCommand: npm install
     startCommand: node Server.js
     plan: free
