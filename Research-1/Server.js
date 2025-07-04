@@ -40,7 +40,6 @@
 
 // /Research-1/Server.js
 
-// ✅ Full Updated Server.js
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -53,26 +52,35 @@ const PORT = process.env.PORT || 3000;
 
 const mongoURI = "mongodb+srv://amulyadeep7:TctwaHzGrNPuVYV8@autotalk.i6cmt8w.mongodb.net/AutoTalk?retryWrites=true&w=majority&appName=AutoTalk";
 
-// ✅ Middleware
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: "secret_key", resave: false, saveUninitialized: true }));
+app.use(session({
+  secret: "secret_key",
+  resave: false,
+  saveUninitialized: true,
+}));
 
-// ✅ Static File Handling
+// Serve Static Files for each section
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/Login", express.static(path.join(__dirname, "Login")));
+app.use("/", express.static(path.join(__dirname)));
 app.use("/Meeting", express.static(path.join(__dirname, "Meeting")));
-app.use("/SignUp", express.static(path.join(__dirname, "Sign Up")));
 app.use("/admin", express.static(path.join(__dirname, "Admin Data")));
 app.use("/author", express.static(path.join(__dirname, "Author Page")));
 
-// ✅ MongoDB Connection
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch(err => console.error("❌ MongoDB connection error:", err));
+// MongoDB Connection
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log("✅ Connected to MongoDB");
+}).catch(err => {
+  console.error("❌ MongoDB connection error:", err);
+});
 
-// ✅ Schemas
+// Schemas
 const User = mongoose.model("users", new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -85,7 +93,7 @@ const Worker = mongoose.model("workers", new mongoose.Schema({
   videoEnabled: { type: Boolean, default: true },
   audioEnabled: { type: Boolean, default: true },
   blocked: { type: Boolean, default: false },
-  joinedAt: { type: Date, default: Date.now }
+  joinedAt: { type: Date, default: Date.now },
 }));
 
 const Admin = mongoose.model("admins", new mongoose.Schema({
@@ -93,9 +101,9 @@ const Admin = mongoose.model("admins", new mongoose.Schema({
   password: { type: String, required: true },
 }));
 
-// ✅ Routes — Auth
+// Routes — Sign Up / Login
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "Sign Up", "index.html"));
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.get("/Login", (req, res) => {
@@ -136,7 +144,7 @@ app.get("/get-username", (req, res) => {
   }
 });
 
-// ✅ Routes — Meeting
+// Routes — Meeting Room
 app.get("/Meeting", (req, res) => {
   res.sendFile(path.join(__dirname, "Meeting", "index.html"));
 });
@@ -153,19 +161,21 @@ app.post("/api/participants", async (req, res) => {
 
 app.get("/api/participant/:uid", async (req, res) => {
   const participant = await Worker.findOne({ uid: req.params.uid });
-  participant
-    ? res.status(200).json({ name: participant.name })
-    : res.status(404).json({ error: "Participant Not Found" });
+  if (!participant) {
+    return res.status(404).json({ error: "Participant Not Found" });
+  }
+  res.status(200).json({ name: participant.name });
 });
 
 app.delete("/api/participants/:uid", async (req, res) => {
   const result = await Worker.findOneAndDelete({ uid: req.params.uid });
-  result
-    ? res.status(200).json({ message: "Participant Removed" })
-    : res.status(404).json({ error: "Participant Not Found" });
+  if (!result) {
+    return res.status(404).json({ error: "Participant Not Found" });
+  }
+  res.status(200).json({ message: "Participant Removed" });
 });
 
-// ✅ Routes — Admin
+// Routes — Admin
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "Admin Data", "index.html"));
 });
@@ -173,12 +183,14 @@ app.get("/admin", (req, res) => {
 app.post("/admin/login", async (req, res) => {
   const { username, password } = req.body;
   const admin = await Admin.findOne({ username, password });
-  admin
-    ? res.redirect("/admin/index.html")
-    : res.redirect("/admin");
+  if (admin) {
+    res.redirect("/admin/dashboard.html");
+  } else {
+    res.redirect("/admin");
+  }
 });
 
-// ✅ Routes — Author
+// Routes — Author
 app.get("/author", (req, res) => {
   res.sendFile(path.join(__dirname, "Author Page", "admin.html"));
 });
@@ -205,7 +217,7 @@ app.put("/api/participants/block/:uid", async (req, res) => {
   res.status(200).json({ message: "Participant Blocked" });
 });
 
-// ✅ Start Server
+// Start Server
 app.listen(PORT, () => {
   console.log("🚀 AutoTalk is Live");
   console.log(`🌐 Visit: http://localhost:${PORT}`);
