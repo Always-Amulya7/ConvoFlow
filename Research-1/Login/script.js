@@ -2,14 +2,12 @@
 const loginButton = document.getElementById("MyHold");
 loginButton.addEventListener("click", async (event) => {
   event.preventDefault();
-
   const usernameInput = document
     .querySelector("input[type='text'][placeholder='User Name']")
     .value.trim();
   const passwordInput = document
     .querySelector("input[type='password'][placeholder='Password']")
     .value.trim();
-
   if (usernameInput && passwordInput) {
     try {
       const response = await fetch("/login", {
@@ -22,9 +20,7 @@ loginButton.addEventListener("click", async (event) => {
           password: passwordInput,
         }),
       });
-
       const data = await response.json();
-
       if (response.ok) {
         alert(data.message || "Login Successful");
         window.location.href = "/Connectivity/index.html";
@@ -46,7 +42,6 @@ document.addEventListener("keydown", (event) => {
     myHold.click();
   }
 });
-
 document.addEventListener("contextmenu", function (e) {
   e.preventDefault();
 });
@@ -56,13 +51,12 @@ document.addEventListener("keydown", function (e) {
   }
 });
 history.pushState(null, null, location.href);
-window.addEventListener('popstate', function () {
+window.addEventListener("popstate", function () {
   history.pushState(null, null, location.href);
 });
 window.history.forward();
-
 window.onunload = function () {
-    null;
+  null;
 };
 
 //Using Local Cache

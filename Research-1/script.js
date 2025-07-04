@@ -4,10 +4,8 @@ const signupForm = document.getElementById("signupForm");
 const myHold1 = document.getElementById("MyHold1");
 signupForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
-
   if (username && password) {
     const response = await fetch("/signup", {
       method: "POST",
@@ -16,7 +14,6 @@ signupForm.addEventListener("submit", async (event) => {
       },
       body: JSON.stringify({ username, password }),
     });
-
     const data = await response.json();
     if (response.ok) {
       alert(data.message);
@@ -43,13 +40,13 @@ document.addEventListener("keydown", function (e) {
   }
 });
 history.pushState(null, null, location.href);
-window.addEventListener('popstate', function () {
+window.addEventListener("popstate", function () {
   history.pushState(null, null, location.href);
 });
 window.history.forward();
 
 window.onunload = function () {
-    null;
+  null;
 };
 
 //Using Local Cache

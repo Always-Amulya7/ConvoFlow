@@ -3,17 +3,13 @@
 document.getElementById("connectButton").addEventListener("click", function () {
   window.location.href = "/public/Instruct.html";
 });
-
 document.getElementById("joinButton").addEventListener("click", function () {
   window.location.href = "/Meeting";
 });
-
 const webCamElement = document.getElementById("webCam");
 const canvasElement = document.getElementById("canvas");
-
 webCamElement.width = 800;
 webCamElement.height = 800;
-
 if (navigator.mediaDevices.getUserMedia) {
   navigator.mediaDevices
     .getUserMedia({ video: true })
@@ -26,9 +22,7 @@ if (navigator.mediaDevices.getUserMedia) {
 } else {
   console.error("GetUserMedia Is Not Supported In This Browser");
 }
-
 const userNameInput = document.getElementById("userNameInput");
-
 fetch("/get-username", {
   method: "GET",
   credentials: "same-origin",
@@ -51,16 +45,12 @@ fetch("/get-username", {
     console.error("Error Fetching Username:", error);
     userNameInput.placeholder = "Your Decent Name";
   });
-
 const joinButton = document.getElementById("joinButton");
 joinButton.disabled = false;
-
 const voiceCheckCanvas = document.getElementById("voiceCheckCanvas");
 const voiceCheckCtx = voiceCheckCanvas.getContext("2d");
-
 voiceCheckCanvas.width = 300;
 voiceCheckCanvas.height = 40;
-
 navigator.mediaDevices
   .getUserMedia({ audio: true })
   .then((stream) => {
@@ -68,21 +58,16 @@ navigator.mediaDevices
     const source = audioContext.createMediaStreamSource(stream);
     const analyser = audioContext.createAnalyser();
     source.connect(analyser);
-
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
     function update() {
       analyser.getByteTimeDomainData(dataArray);
-
       voiceCheckCtx.clearRect(
         0,
         0,
         voiceCheckCanvas.width,
         voiceCheckCanvas.height
       );
-
       const barWidth = voiceCheckCanvas.width / dataArray.length;
-
       for (let i = 0; i < dataArray.length; i++) {
         const barHeight = (dataArray[i] * voiceCheckCanvas.height) / 255;
         voiceCheckCtx.fillStyle = `hsl(${
@@ -95,16 +80,13 @@ navigator.mediaDevices
           barHeight
         );
       }
-
       requestAnimationFrame(update);
     }
-
     update();
   })
   .catch((error) => {
     console.error("Error Accessing Microphone:", error);
   });
-
 const Hold = document.getElementById("joinButton");
 document.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
@@ -121,13 +103,12 @@ document.addEventListener("keydown", function (e) {
   }
 });
 history.pushState(null, null, location.href);
-window.addEventListener('popstate', function () {
+window.addEventListener("popstate", function () {
   history.pushState(null, null, location.href);
 });
 window.history.forward();
-
 window.onunload = function () {
-    null;
+  null;
 };
 
 //Using Local Cache

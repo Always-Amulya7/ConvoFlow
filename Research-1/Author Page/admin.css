@@ -151,24 +151,28 @@ tr {
     table {
         width: 100%;
     }
-    .ToDis{
+
+    .ToDis {
         display: none;
     }
+
     button {
         padding: 1%;
     }
 
-    h1{
+    h1 {
         font-size: 22px;
         display: flex;
         justify-content: center;
     }
-    h2{
+
+    h2 {
         font-size: 18px;
         display: flex;
         justify-content: center;
     }
-    tr{
+
+    tr {
         display: flex;
         flex-direction: column;
         padding: 15px;
@@ -180,10 +184,11 @@ tr {
         background-size: cover;
     }
 
-    .ToDis{
+    .ToDis {
         display: none;
     }
-    tr{
+
+    tr {
         display: flex;
         flex-direction: column;
         padding: 15px;
@@ -193,12 +198,13 @@ tr {
         padding: 1%;
     }
 
-    h1{
+    h1 {
         font-size: 22px;
         display: flex;
         justify-content: center;
     }
-    h2{
+
+    h2 {
         font-size: 18px;
         display: flex;
         justify-content: center;
@@ -210,9 +216,11 @@ tr {
     body {
         background-size: cover;
     }
-    .ToDis{
+
+    .ToDis {
         display: none;
     }
+
     table {
         width: 100%;
     }
@@ -221,17 +229,19 @@ tr {
         padding: 1%;
     }
 
-    h1{
+    h1 {
         font-size: 22px;
         display: flex;
         justify-content: center;
     }
-    h2{
+
+    h2 {
         font-size: 18px;
         display: flex;
         justify-content: center;
     }
-    tr{
+
+    tr {
         display: flex;
         flex-direction: column;
         padding: 15px;
@@ -242,9 +252,11 @@ tr {
     body {
         background-size: cover;
     }
-    .ToDis{
+
+    .ToDis {
         display: none;
     }
+
     table {
         width: 100%;
     }
@@ -253,17 +265,19 @@ tr {
         padding: 1%;
     }
 
-    h1{
+    h1 {
         font-size: 22px;
         display: flex;
         justify-content: center;
     }
-    h2{
+
+    h2 {
         font-size: 18px;
         display: flex;
         justify-content: center;
     }
-    tr{
+
+    tr {
         display: flex;
         flex-direction: column;
         padding: 15px;

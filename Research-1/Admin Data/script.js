@@ -17,13 +17,10 @@ window.addEventListener("popstate", function () {
   history.pushState(null, null, location.href);
 });
 window.history.forward();
-
 window.onunload = function () {
   null;
 };
-
 const Creation=document.getElementById("Creation");
-
 document.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     event.preventDefault();
@@ -31,18 +28,14 @@ document.addEventListener("keydown", (event) => {
   }
 });
 const loginForm = document.getElementById("adminLoginForm");
-
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-
   const username = document.getElementById("loginUser").value.trim();
   const password = document.getElementById("loginPassword").value.trim();
-
   if (!username || !password) {
     alert("Please enter both username and password.");
     return;
   }
-
   try {
     const response = await fetch("/admin/login", {
       method: "POST",
@@ -51,9 +44,8 @@ loginForm.addEventListener("submit", async (e) => {
       },
       body: JSON.stringify({ username, password })
     });
-
     if (response.ok) {
-      window.location.href = "/author"; // redirect only on success
+      window.location.href = "/author";
     } else {
       const data = await response.json();
       alert(data.error || "Login failed. Invalid credentials.");

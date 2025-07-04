@@ -1,41 +1,8 @@
 const APP_ID = "ca59d2f6cb0b40f2938f5622e8d26c6a";
-const TOKEN ="007eJxTYJiydVfnP6fr/Zz9Jeftf2+OOWWV+83xp3Bw5mL7H8XJcoIKDMmJppYpRmlmyUkGSSYGaUaWxhZppmZGRqkWKUZmyWaJBzakZzQEMjL0X45jZGSAQBBfkMGxtCRfISQxJ1vBNzW1JDMvnYEBAK1yJcA=";
+const TOKEN =
+  "007eJxTYJiydVfnP6fr/Zz9Jeftf2+OOWWV+83xp3Bw5mL7H8XJcoIKDMmJppYpRmlmyUkGSSYGaUaWxhZppmZGRqkWKUZmyWaJBzakZzQEMjL0X45jZGSAQBBfkMGxtCRfISQxJ1vBNzW1JDMvnYEBAK1yJcA=";
 const CHANNEL = "Auto Talk Meeting";
 const API_URL = "http://convoflow.onrender.com/api/participants";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 let localTracks = [null, null];
@@ -43,14 +10,12 @@ let remoteUsers = {};
 let userName = "";
 let roomNumber = "";
 let UID = "";
-
 window.onload = async () => {
   alert(
     "Information - To Maintain Privacy You Are Required To Enter A Random (But Relevant) Name For Entry In The Meeting - Amulya Shrivastava (Developer)"
   );
   userName = prompt("Enter Your Room Name");
   roomNumber = prompt("Enter The Room Number");
-
   if (userName && roomNumber === "ADS10") {
     UID = await client.join(APP_ID, CHANNEL, TOKEN, null);
     await saveParticipantToDatabase(userName, roomNumber, UID);
@@ -62,7 +27,6 @@ window.onload = async () => {
     alert("Room Not Available");
   }
 };
-
 async function saveParticipantToDatabase(name, roomNumber, uid) {
   try {
     const response = await fetch(API_URL, {
@@ -70,18 +34,15 @@ async function saveParticipantToDatabase(name, roomNumber, uid) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, roomNumber, uid }),
     });
-
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.error || "Failed To Save Participant");
     }
-
     console.log("Participant Information Saved Successfully");
   } catch (error) {
     console.error("Error Saving Participant:", error);
   }
 }
-
 async function fetchUserNameFromDatabase(uid) {
   try {
     const response = await fetch(
@@ -95,7 +56,6 @@ async function fetchUserNameFromDatabase(uid) {
     return `User ${uid}`;
   }
 }
-
 async function removeParticipantFromDatabase() {
   try {
     await fetch(`http://convoflow.onrender.com/api/participants/${UID}`, {
@@ -106,11 +66,9 @@ async function removeParticipantFromDatabase() {
     console.error("Error Removing Participant:", error);
   }
 }
-
 async function joinStream() {
   client.on("user-published", handleUserJoined);
   client.on("user-left", handleUserLeft);
-
   localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
   const player = `<div class="video-container" id="user-container-${UID}">
                         <div class="video-player" id="user-${UID}"></div>
@@ -120,15 +78,11 @@ async function joinStream() {
   localTracks[1].play(`user-${UID}`);
   await client.publish(localTracks);
 }
-
 const processedUsers = new Set();
-
 async function handleUserJoined(user, mediaType) {
   remoteUsers[user.uid] = user;
   await client.subscribe(user, mediaType);
-
   const userName = await fetchUserNameFromDatabase(user.uid);
-
   if (mediaType === "video") {
     if (!document.getElementById(`user-container-${user.uid}`)) {
       const player = `<div class="video-container" id="user-container-${user.uid}">
@@ -141,44 +95,37 @@ async function handleUserJoined(user, mediaType) {
       user.videoTrack.play(`user-${user.uid}`);
     }
   }
-
   if (mediaType === "audio") {
     user.audioTrack.play();
   }
-
   if (!processedUsers.has(user.uid)) {
     processedUsers.add(user.uid);
     updateChatBox(`${userName} Has Joined The Room.`);
   }
 }
-
 function handleUserLeft(user) {
   const userName = remoteUsers[user.uid]?.name || `User ${user.uid}`;
   delete remoteUsers[user.uid];
   document.getElementById(`user-container-${user.uid}`).remove();
 }
-
 function displayConnectionDetails() {
   const chatDisplay = document.getElementById("chat-display");
   const userDetails = `<p><strong>Welcome, ${userName}</strong></p>
                          <p>Room Number: ${roomNumber}</p>`;
   chatDisplay.innerHTML = userDetails + chatDisplay.innerHTML;
 }
-
 function updateChatBox(message) {
   const chatDisplay = document.getElementById("chat-display");
   const messageElement = document.createElement("div");
   messageElement.textContent = message;
   chatDisplay.appendChild(messageElement);
 }
-
 document.getElementById("send-chat").addEventListener("click", sendMessage);
 document.getElementById("chat-input").addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     sendMessage();
   }
 });
-
 function sendMessage() {
   const message = document.getElementById("chat-input").value;
   if (message) {
@@ -186,7 +133,6 @@ function sendMessage() {
     document.getElementById("chat-input").value = "";
   }
 }
-
 document.getElementById("Quit").addEventListener("click", async () => {
   await removeParticipantFromDatabase();
   if (localTracks[0]) localTracks[0].stop();
@@ -197,10 +143,8 @@ document.getElementById("Quit").addEventListener("click", async () => {
   document.getElementById("Video-Grid").innerHTML = "";
   alert("You Have Left The Room.");
 });
-
 document.getElementById("Speak").addEventListener("click", toggleMic);
 document.getElementById("Video").addEventListener("click", toggleCamera);
-
 async function toggleMic(e) {
   if (localTracks[0]) {
     if (localTracks[0].enabled) {
@@ -212,7 +156,6 @@ async function toggleMic(e) {
     }
   }
 }
-
 async function toggleCamera(e) {
   if (localTracks[1]) {
     if (localTracks[1].enabled) {
@@ -224,7 +167,6 @@ async function toggleCamera(e) {
     }
   }
 }
-
 document.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     event.preventDefault();
@@ -244,7 +186,6 @@ window.addEventListener("popstate", function () {
   history.pushState(null, null, location.href);
 });
 window.history.forward();
-
 window.onunload = function () {
   null;
 };

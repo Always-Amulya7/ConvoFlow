@@ -2,35 +2,28 @@ const API_URL = "https://convoflow.onrender.com/api/participants";
 const participantsList = document.getElementById("participants-list");
 const toggleVideoButton = document.getElementById("toggle-video");
 const toggleVoiceButton = document.getElementById("toggle-voice");
-
 let globalVideoState = true;
 let globalVoiceState = true;
-
 async function fetchParticipants() {
   try {
     const response = await fetch(API_URL);
     if (!response.ok) throw new Error("Failed to fetch participants");
     const participants = await response.json();
-
     if (!Array.isArray(participants)) throw new Error("Unexpected data format");
     renderParticipants(participants);
   } catch (error) {
     console.error("Error fetching participants:", error.message);
   }
 }
-
 function renderParticipants(participants) {
   participantsList.innerHTML = "";
-
   if (participants.length === 0) {
     participantsList.innerHTML =
       "<tr><td colspan='4'>No Participants Found</td></tr>";
     return;
   }
-
   participants.forEach((participant) => {
     const row = document.createElement("tr");
-
     row.innerHTML = `
             <td>${participant.name || "N/A"}</td>
             <td>${participant.roomNumber || "N/A"}</td>
@@ -44,11 +37,9 @@ function renderParticipants(participants) {
                 }')">Block</button>
             </td>
         `;
-
     participantsList.appendChild(row);
   });
 }
-
 toggleVideoButton.addEventListener("click", async () => {
   globalVideoState = !globalVideoState;
   alert(
@@ -56,7 +47,6 @@ toggleVideoButton.addEventListener("click", async () => {
       ? "Video Enabled for All Participants"
       : "Video Disabled for All Participants"
   );
-
   try {
     await fetch(`${API_URL}/control`, {
       method: "PUT",
@@ -67,7 +57,6 @@ toggleVideoButton.addEventListener("click", async () => {
     console.error("Error toggling video:", error);
   }
 });
-
 toggleVoiceButton.addEventListener("click", async () => {
   globalVoiceState = !globalVoiceState;
   alert(
@@ -75,7 +64,6 @@ toggleVoiceButton.addEventListener("click", async () => {
       ? "Microphone Enabled for All Participants"
       : "Microphone Disabled for All Participants"
   );
-
   try {
     await fetch(`${API_URL}/control`, {
       method: "PUT",
@@ -86,7 +74,6 @@ toggleVoiceButton.addEventListener("click", async () => {
     console.error("Error toggling voice:", error);
   }
 });
-
 async function kickParticipant(uid) {
   try {
     const response = await fetch(`${API_URL}/${uid}`, { method: "DELETE" });
@@ -100,7 +87,6 @@ async function kickParticipant(uid) {
     console.error("Error kicking participant:", error.message);
   }
 }
-
 async function blockParticipant(uid) {
   try {
     const response = await fetch(`${API_URL}/block/${uid}`, { method: "PUT" });
@@ -114,9 +100,7 @@ async function blockParticipant(uid) {
     console.error("Error blocking participant:", error.message);
   }
 }
-
 fetchParticipants();
-
 document.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     event.preventDefault();
@@ -136,7 +120,6 @@ window.addEventListener("popstate", function () {
   history.pushState(null, null, location.href);
 });
 window.history.forward();
-
 window.onunload = function () {
   null;
 };

@@ -140,26 +140,31 @@ button {
     body {
         background-size: cover;
     }
-    #Chat-Box{
+
+    #Chat-Box {
         display: none;
     }
-    #Video-Grid{
+
+    #Video-Grid {
         display: flex;
         justify-content: center;
         flex-direction: column-reverse;
         position: relative;
     }
-    .video-container{
+
+    .video-container {
         height: 25vh;
     }
-    h1{
+
+    h1 {
         position: relative;
         left: 0;
         display: flex;
         justify-content: center;
         font-size: 24px;
     }
-    #Connect{
+
+    #Connect {
         display: flex;
         justify-content: center;
         top: 0;
@@ -171,26 +176,31 @@ button {
     body {
         background-size: cover;
     }
-    #Chat-Box{
+
+    #Chat-Box {
         display: none;
     }
-    #Video-Grid{
+
+    #Video-Grid {
         display: flex;
         justify-content: center;
         flex-direction: column-reverse;
         position: relative;
     }
-    .video-container{
+
+    .video-container {
         height: 25vh;
     }
-    h1{
+
+    h1 {
         position: relative;
         left: 0;
         display: flex;
         justify-content: center;
         font-size: 24px;
     }
-    #Connect{
+
+    #Connect {
         display: flex;
         justify-content: center;
         top: 0;
@@ -202,26 +212,31 @@ button {
     body {
         background-size: cover;
     }
-    #Chat-Box{
+
+    #Chat-Box {
         display: none;
     }
-    #Video-Grid{
+
+    #Video-Grid {
         display: flex;
         justify-content: center;
         flex-direction: row;
         position: relative;
     }
-    .video-container{
+
+    .video-container {
         height: 25vh;
     }
-    h1{
+
+    h1 {
         position: relative;
         left: 0;
         display: flex;
         justify-content: center;
         font-size: 26px;
     }
-    #Connect{
+
+    #Connect {
         display: flex;
         justify-content: center;
         top: 0;
@@ -233,26 +248,31 @@ button {
     body {
         background-size: cover;
     }
-    #Chat-Box{
+
+    #Chat-Box {
         display: none;
     }
-    #Video-Grid{
+
+    #Video-Grid {
         display: flex;
         justify-content: center;
         flex-direction: column-reverse;
         position: relative;
     }
-    .video-container{
+
+    .video-container {
         height: 25vh;
     }
-    h1{
+
+    h1 {
         position: relative;
         left: 0;
         display: flex;
         justify-content: center;
         font-size: 20px;
     }
-    #Connect{
+
+    #Connect {
         display: flex;
         justify-content: center;
         top: 0;

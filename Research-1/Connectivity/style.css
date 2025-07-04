@@ -137,8 +137,9 @@ button {
     height: 9%;
 }
 
-input{
-    color: white; font-size: large;
+input {
+    color: white;
+    font-size: large;
 }
 
 .Worr2 {
@@ -301,7 +302,7 @@ input{
     }
 
     .Worr2 {
-        font-size:18px;
+        font-size: 18px;
         display: flex;
         justify-content: center;
     }
@@ -427,7 +428,7 @@ input{
         display: inline-flex;
     }
 
-    .But{
+    .But {
         display: flex;
     }
 }
