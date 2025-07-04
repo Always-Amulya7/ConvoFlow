@@ -13,7 +13,7 @@
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "dev:all": "concurrently \"nodemon Server.js\" \"cd Meeting && nodemon Server.js\" \"cd 'Admin Data' && nodemon Server.js\" \"cd 'Author Page' && nodemon Server.js\""
   },
   "keywords": [],

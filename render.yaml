@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: main-server
+    env: node
+    rootDir: .
+    buildCommand: npm install
+    startCommand: node Server.js
+    plan: free
+
+  - type: web
+    name: admin-server
+    env: node
+    rootDir: Admin Data
+    buildCommand: npm install
+    startCommand: node Server.js
+    plan: free
+
+  - type: web
+    name: author-server
+    env: node
+    rootDir: Author Page
+    buildCommand: npm install
+    startCommand: node Server.js
+    plan: free
+
+  - type: web
+    name: meeting-server
+    env: node
+    rootDir: Meeting
+    buildCommand: npm install
+    startCommand: node Server.js
+    plan: free
