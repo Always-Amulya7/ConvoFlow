@@ -1,7 +1,20 @@
-const APP_ID = "Your Token Id";
-const TOKEN ="Your Token";
+const APP_ID = "ca59d2f6cb0b40f2938f5622e8d26c6a";
+const TOKEN ="007eJxTYJiydVfnP6fr/Zz9Jeftf2+OOWWV+83xp3Bw5mL7H8XJcoIKDMmJppYpRmlmyUkGSSYGaUaWxhZppmZGRqkWKUZmyWaJBzakZzQEMjL0X45jZGSAQBBfkMGxtCRfISQxJ1vBNzW1JDMvnYEBAK1yJcA=";
 const CHANNEL = "Auto Talk Meeting";
 const API_URL = "http://localhost:5000/api/participants";
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

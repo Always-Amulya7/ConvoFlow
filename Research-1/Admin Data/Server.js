@@ -2,14 +2,14 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
-
+const mongoURI = "mongodb+srv://amulyadeep7:TctwaHzGrNPuVYV8@autotalk.i6cmt8w.mongodb.net/?retryWrites=true&w=majority&appName=AutoTalk";
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname)));
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/Admin_Login", {
+  .connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -21,7 +21,7 @@ const adminSchema = new mongoose.Schema({
   password: { type: String, required: true },
 });
 
-const Admin = mongoose.model("Admin", adminSchema);
+const Admin = mongoose.model("admins", adminSchema);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
@@ -34,7 +34,7 @@ app.post("/login", async (req, res) => {
     const admin = await Admin.findOne({ username, password });
 
     if (admin) {
-      res.redirect("http://192.168.130.18:10745");
+      res.redirect("http://localhost:10745");
     } else {
       res.redirect("/");
     }

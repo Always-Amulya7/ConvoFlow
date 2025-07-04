@@ -5,7 +5,7 @@ document.getElementById("connectButton").addEventListener("click", function () {
 });
 
 document.getElementById("joinButton").addEventListener("click", function () {
-  window.location.href = "http://192.168.130.18:5000";
+  window.location.href = "http://localhost:5000";
 });
 
 const webCamElement = document.getElementById("webCam");

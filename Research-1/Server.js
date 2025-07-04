@@ -5,7 +5,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const session = require("express-session");
-
+const mongoURI = "mongodb+srv://amulyadeep7:TctwaHzGrNPuVYV8@autotalk.i6cmt8w.mongodb.net/?retryWrites=true&w=majority&appName=AutoTalk";
 const app = express();
 const PORT = 3000;
 
@@ -21,20 +21,37 @@ app.use(
   })
 );
 
-mongoose
-  .connect("mongodb://127.0.0.1:27017/AutoTalk", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("Connected To Mongo DataBase"))
-  .catch((err) => console.error("Mongo DataBase Connection Error:", err));
+// For Local Host
 
+// mongoose
+//   .connect("mongodb://127.0.0.1:27017/AutoTalk", {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => console.log("Connected To Mongo DataBase"))
+//   .catch((err) => console.error("Mongo DataBase Connection Error:", err));
+
+// const userSchema = new mongoose.Schema({
+//   username: { type: String, required: true, unique: true },
+//   password: { type: String, required: true },
+// });
+
+// For Production
+
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("Connected to MongoDB Atlas (Auto_Talk DB)"))
+.catch((err) => console.error("MongoDB connection error:", err));
+
+// Schema & Model for 'users' collection inside 'Auto_Talk' DB
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
 });
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model("users", userSchema); // This will use the 'users' collection
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "Sign Up", "index.html"));

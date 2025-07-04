@@ -2,8 +2,8 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
-
-mongoose.connect('mongodb://127.0.0.1:27017/Meeting', { useNewUrlParser: true, useUnifiedTopology: true })
+const mongoURI = "mongodb+srv://amulyadeep7:TctwaHzGrNPuVYV8@autotalk.i6cmt8w.mongodb.net/?retryWrites=true&w=majority&appName=AutoTalk";
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected To Mongo Database'))
     .catch(err => console.error('MongoDB Connection Error:', err));
 
@@ -14,7 +14,7 @@ const workerSchema = new mongoose.Schema({
     joinedAt: { type: Date, default: Date.now }
 });
 
-const Worker = mongoose.model('Worker', workerSchema);
+const Worker = mongoose.model('workers', workerSchema);
 
 const app = express();
 const PORT = 5000;
