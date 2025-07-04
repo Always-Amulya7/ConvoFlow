@@ -34,7 +34,7 @@ app.post("/login", async (req, res) => {
     const admin = await Admin.findOne({ username, password });
 
     if (admin) {
-      res.redirect("http://convoflow.onrender.com:10745");
+      res.redirect("http://convoflow.onrender.com");
     } else {
       res.redirect("/");
     }
