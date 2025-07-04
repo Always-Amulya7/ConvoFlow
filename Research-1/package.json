@@ -10,10 +10,10 @@
   },
   "name": "research-1",
   "version": "1.0.0",
-  "main": "script.js",
+  "main": "Server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
+    "start": "node Server.js",
     "dev:all": "concurrently \"nodemon Server.js\" \"cd Meeting && nodemon Server.js\" \"cd 'Admin Data' && nodemon Server.js\" \"cd 'Author Page' && nodemon Server.js\""
   },
   "keywords": [],

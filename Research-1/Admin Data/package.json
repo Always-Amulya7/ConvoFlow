@@ -1,5 +1,5 @@
 {
-  "name": "author-page",
+  "name": "admin-data",
   "version": "1.0.0",
   "main": "Server.js",
   "scripts": {
@@ -11,9 +11,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.21.1",
-    "mongoose": "^8.8.3",
-    "path": "^0.12.7"
+    "express": "^5.1.0"
   }
 }
