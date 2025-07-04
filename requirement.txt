@@ -1,1 +1,0 @@
-npm install nodemon express bcryptjs body-parser cors express-session mongodb mongoose

@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:10745/api/participants";
+const API_URL = "https://convoflow.onrender.com/api/participants";
 const participantsList = document.getElementById("participants-list");
 const toggleVideoButton = document.getElementById("toggle-video");
 const toggleVoiceButton = document.getElementById("toggle-voice");

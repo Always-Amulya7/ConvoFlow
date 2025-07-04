@@ -1,7 +1,7 @@
 const APP_ID = "ca59d2f6cb0b40f2938f5622e8d26c6a";
 const TOKEN ="007eJxTYJiydVfnP6fr/Zz9Jeftf2+OOWWV+83xp3Bw5mL7H8XJcoIKDMmJppYpRmlmyUkGSSYGaUaWxhZppmZGRqkWKUZmyWaJBzakZzQEMjL0X45jZGSAQBBfkMGxtCRfISQxJ1vBNzW1JDMvnYEBAK1yJcA=";
 const CHANNEL = "Auto Talk Meeting";
-const API_URL = "http://localhost:5000/api/participants";
+const API_URL = "http://convoflow.onrender.com:5000/api/participants";
 
 
 
@@ -85,7 +85,7 @@ async function saveParticipantToDatabase(name, roomNumber, uid) {
 async function fetchUserNameFromDatabase(uid) {
   try {
     const response = await fetch(
-      `http://localhost:5000/api/participant/${uid}`
+      `http://convoflow.onrender.com:5000/api/participant/${uid}`
     );
     if (!response.ok) return `User ${uid}`;
     const data = await response.json();
@@ -98,7 +98,7 @@ async function fetchUserNameFromDatabase(uid) {
 
 async function removeParticipantFromDatabase() {
   try {
-    await fetch(`http://localhost:5000/api/participants/${UID}`, {
+    await fetch(`http://convoflow.onrender.com:5000/api/participants/${UID}`, {
       method: "DELETE",
     });
     console.log("Participant Removed Successfully");

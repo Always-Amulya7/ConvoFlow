@@ -34,7 +34,7 @@ app.post("/login", async (req, res) => {
     const admin = await Admin.findOne({ username, password });
 
     if (admin) {
-      res.redirect("http://localhost:10745");
+      res.redirect("http://convoflow.onrender.com:10745");
     } else {
       res.redirect("/");
     }
@@ -52,5 +52,5 @@ app.post("/reset-password", (req, res) => {
 
 const PORT = 4000;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://convoflow.onrender.com:${PORT}`);
 });
