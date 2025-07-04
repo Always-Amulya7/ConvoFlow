@@ -30,17 +30,36 @@ document.addEventListener("keydown", (event) => {
     Creation.click();
   }
 });
+const loginForm = document.getElementById("adminLoginForm");
 
-app.post("/admin/login", async (req, res) => {
-  const { username, password } = req.body;
-  const admin = await Admin.findOne({ username, password });
+loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  if (admin) {
-    // Optional: set session
-    req.session.username = username;
-    res.redirect(303, "/author"); // 303 = see other (forces GET)
-  } else {
-    res.status(401).json({ error: "Invalid credentials" });
+  const username = document.getElementById("loginUser").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  if (!username || !password) {
+    alert("Please enter both username and password.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/admin/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ username, password })
+    });
+
+    if (response.ok) {
+      window.location.href = "/author"; // redirect only on success
+    } else {
+      const data = await response.json();
+      alert(data.error || "Login failed. Invalid credentials.");
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    alert("Server error. Please try again later.");
   }
 });
-

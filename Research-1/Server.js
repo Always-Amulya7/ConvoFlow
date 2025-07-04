@@ -217,6 +217,18 @@ app.put("/api/participants/block/:uid", async (req, res) => {
   res.status(200).json({ message: "Participant Blocked" });
 });
 
+app.post("/admin/login", async (req, res) => {
+  const { username, password } = req.body;
+  const admin = await Admin.findOne({ username, password });
+
+  if (admin) {
+    req.session.username = username;
+    res.status(200).json({ message: "Login successful" }); // For fetch response
+  } else {
+    res.status(401).json({ error: "Invalid credentials" });
+  }
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log("🚀 AutoTalk is Live");
