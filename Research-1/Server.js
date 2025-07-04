@@ -1,25 +1,25 @@
 //Integrating MongoDB
 
-const express = require("express");
-const path = require("path");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const session = require("express-session");
-const mongoURI = "mongodb+srv://amulyadeep7:TctwaHzGrNPuVYV8@autotalk.i6cmt8w.mongodb.net/?retryWrites=true&w=majority&appName=AutoTalk";
-const app = express();
-const PORT = 3000;
+// const express = require("express");
+// const path = require("path");
+// const bodyParser = require("body-parser");
+// const mongoose = require("mongoose");
+// const session = require("express-session");
+// const mongoURI = "mongodb+srv://amulyadeep7:TctwaHzGrNPuVYV8@autotalk.i6cmt8w.mongodb.net/?retryWrites=true&w=majority&appName=AutoTalk";
+// const app = express();
+// const PORT = 3000;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname)));
-app.use(
-  session({
-    secret: "your_secret_key",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
-);
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(express.static(path.join(__dirname)));
+// app.use(
+//   session({
+//     secret: "your_secret_key",
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false },
+//   })
+// );
 
 // For Local Host
 
@@ -38,23 +38,56 @@ app.use(
 
 // For Production
 
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("Connected to MongoDB Atlas (Auto_Talk DB)"))
-.catch((err) => console.error("MongoDB connection error:", err));
+// /Research-1/Server.js
 
-// Schema & Model for 'users' collection inside 'Auto_Talk' DB
-const userSchema = new mongoose.Schema({
+const express = require("express");
+const path = require("path");
+const mongoose = require("mongoose");
+const session = require("express-session");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+const mongoURI = "mongodb+srv://amulyadeep7:TctwaHzGrNPuVYV8@autotalk.i6cmt8w.mongodb.net/AutoTalk?retryWrites=true&w=majority&appName=AutoTalk";
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({ secret: "secret_key", resave: false, saveUninitialized: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// MongoDB Connection
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch(err => console.error("❌ MongoDB connection error:", err));
+
+// SCHEMAS
+const User = mongoose.model("users", new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-});
+}));
 
-const User = mongoose.model("users", userSchema); // This will use the 'users' collection
+const Worker = mongoose.model("workers", new mongoose.Schema({
+  name: String,
+  roomNumber: String,
+  uid: String,
+  videoEnabled: { type: Boolean, default: true },
+  audioEnabled: { type: Boolean, default: true },
+  blocked: { type: Boolean, default: false },
+  joinedAt: { type: Date, default: Date.now }
+}));
 
+const Admin = mongoose.model("admins", new mongoose.Schema({
+  username: { type: String, required: true },
+  password: { type: String, required: true },
+}));
+
+// ROUTES — Signup/Login
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "Sign Up", "index.html"));
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.get("/Login", (req, res) => {
@@ -67,7 +100,7 @@ app.post("/signup", async (req, res) => {
     const user = new User({ username, password });
     await user.save();
     res.status(201).send({ message: "User Signed Up Successfully" });
-  } catch (error) {
+  } catch (err) {
     res.status(400).send({ error: "Username Already Exists Or Invalid Data" });
   }
 });
@@ -82,7 +115,7 @@ app.post("/login", async (req, res) => {
     } else {
       res.status(401).send({ error: "Invalid Username Or Password" });
     }
-  } catch (error) {
+  } catch (err) {
     res.status(500).send({ error: "Server Error" });
   }
 });
@@ -95,111 +128,80 @@ app.get("/get-username", (req, res) => {
   }
 });
 
-console.log("This Has Digital Rights");
-console.log("Developer - Amulya Shrivastava");
-
-app.listen(PORT, () => {
-  console.log(`Server Is Running On http://convoflow.onrender.com:${PORT}`);
+// ROUTES — Meeting Room
+app.use("/Meeting", express.static(path.join(__dirname, "Meeting")));
+app.get("/Meeting", (req, res) => {
+  res.sendFile(path.join(__dirname, "Meeting", "index.html"));
 });
 
-//Using Local Cache
+app.post("/api/participants", async (req, res) => {
+  const { name, roomNumber, uid } = req.body;
+  if (!name || !roomNumber || !uid) {
+    return res.status(400).json({ error: "Name, Room Number, and UID are required" });
+  }
+  const newWorker = new Worker({ name, roomNumber, uid });
+  await newWorker.save();
+  res.status(201).json({ message: "Participant Added", worker: newWorker });
+});
 
-// const express = require('express');
-// const path = require('path');
+app.get("/api/participant/:uid", async (req, res) => {
+  const participant = await Worker.findOne({ uid: req.params.uid });
+  participant
+    ? res.status(200).json({ name: participant.name })
+    : res.status(404).json({ error: "Participant Not Found" });
+});
 
-// const app = express();
-// const PORT = 3000;
+app.delete("/api/participants/:uid", async (req, res) => {
+  const result = await Worker.findOneAndDelete({ uid: req.params.uid });
+  result
+    ? res.status(200).json({ message: "Participant Removed" })
+    : res.status(404).json({ error: "Participant Not Found" });
+});
 
-// // Serve static files from the main project directory
-// app.use(express.static(path.join(__dirname)));
+// ROUTES — Admin Page
+app.use("/admin", express.static(path.join(__dirname, "Admin Data")));
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "Admin Data", "index.html"));
+});
 
-// // Default route that serves the Sign Up page directly
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'Sign Up', 'index.html'));
-// });
+app.post("/admin/login", async (req, res) => {
+  const { username, password } = req.body;
+  const admin = await Admin.findOne({ username, password });
+  admin
+    ? res.redirect("/admin/dashboard.html")
+    : res.redirect("/admin");
+});
 
-// // Route for the Sign Up page (optional, in case you need it separately)
-// app.get('/SignUp', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'Sign Up', 'index.html'));
-// });
+// ROUTES — Author Page
+app.use("/author", express.static(path.join(__dirname, "Author Page")));
+app.get("/author", (req, res) => {
+  res.sendFile(path.join(__dirname, "Author Page", "admin.html"));
+});
 
-// // Route for the Login page
-// app.get('/Login', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'Login', 'index.html'));
-// });
+app.put("/api/participants/control", async (req, res) => {
+  const { videoEnabled, audioEnabled } = req.body;
+  if (videoEnabled !== undefined) await Worker.updateMany({}, { videoEnabled });
+  if (audioEnabled !== undefined) await Worker.updateMany({}, { audioEnabled });
+  res.status(200).json({ message: "Control Updated" });
+});
 
-// // Route for the Connectivity Page page
-// app.get('/Connectivity', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'Connectivity', 'index.html'));
-// });
+app.put("/api/participants/kick/:uid", async (req, res) => {
+  const result = await Worker.findOneAndDelete({ uid: req.params.uid });
+  result
+    ? res.status(200).json({ message: "Participant Kicked" })
+    : res.status(404).json({ error: "Participant Not Found" });
+});
 
-// // Route for the Meeting page
-// app.get('/Meeting', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'Meeting', 'index.html'));
-// });
+app.put("/api/participants/block/:uid", async (req, res) => {
+  const participant = await Worker.findOne({ uid: req.params.uid });
+  if (!participant) return res.status(404).json({ error: "Participant Not Found" });
+  participant.blocked = true;
+  await participant.save();
+  res.status(200).json({ message: "Participant Blocked" });
+});
 
-// // Start the server
-// app.listen(PORT, () => {
-//     console.log(`Server is running on http://convoflow.onrender.com:${PORT}`);
-// });
-
-//Experiment-1
-
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const path = require('path');
-// const bodyParser = require('body-parser');
-// const app = express();
-// const PORT = 3000;
-
-// // MongoDB Connection
-// mongoose.connect('mongodb://127.0.0.1:27017/AutoTalk', {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// }).then(() => {
-//   console.log('MongoDB Initiated');
-// }).catch((err) => {
-//   console.error('MongoDB Connection Error:', err);
-// });
-
-// // MongoDB Schema and Model
-// const userSchema = new mongoose.Schema({
-//   username: { type: String, required: true, unique: true },
-//   password: { type: String, required: true },
-// });
-// const User = mongoose.model('User', userSchema);
-
-// // Middleware
-// app.use(express.static(path.join(__dirname))); // Serve static files
-// app.use(bodyParser.json()); // Parse JSON body
-
-// // Default route serving Sign Up page
-// app.get('/', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'Sign Up', 'index.html'));
-// });
-
-// // Route to handle Sign Up form submission
-// app.post('/signup', async (req, res) => {
-//   const { username, password } = req.body;
-
-//   try {
-//     if (!username || !password) {
-//       return res.status(400).json({ message: 'Username And Password Are Required' });
-//     }
-
-//     const newUser = new User({ username, password });
-//     await newUser.save(); // Save to MongoDB
-//     res.status(201).json({ message: 'User Registered Successfully' });
-//   } catch (error) {
-//     if (error.code === 11000) { // Duplicate key error
-//       res.status(400).json({ message: 'Username Already Exists' });
-//     } else {
-//       res.status(500).json({ message: 'Server Error', error });
-//     }
-//   }
-// });
-
-// // Start the server
-// app.listen(PORT, () => {
-//   console.log(`Server is running on http://convoflow.onrender.com:${PORT}`);
-// });
+// Start Server
+app.listen(PORT, () => {
+  console.log("🚀 AutoTalk is Live");
+  console.log(`🌐 Visit: http://localhost:${PORT}`);
+});
