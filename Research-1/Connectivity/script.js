@@ -5,7 +5,7 @@ document.getElementById("connectButton").addEventListener("click", function () {
 });
 
 document.getElementById("joinButton").addEventListener("click", function () {
-  window.location.href = "http://convoflow.onrender.com:5000";
+  window.location.href = "http://convoflow.onrender.com";
 });
 
 const webCamElement = document.getElementById("webCam");
