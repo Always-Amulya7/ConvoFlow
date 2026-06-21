@@ -12,6 +12,12 @@
 <br>6. Mongoose (For Creation Of Mongo Db Schema)
 </p>
 
+Deployment on Render Use- 
+
+Build Command-> `cd Research-1 && npm install && npm install concurrently bcryptjs body-parser cors express express-session mongodb mongoose`
+
+Start Command-> `cd Research-1 && npm start`
+
 ### Steps To Start With Auto Talk Meeting
 
 #### <p>Go To The Project Repository Named As Research-1 ( Where The Folder Is Located )</p>
